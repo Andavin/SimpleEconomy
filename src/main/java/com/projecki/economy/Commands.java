@@ -20,6 +20,12 @@ public record Commands(SimpleEconomy economy) {
     public static final long THOUSAND = 1000, MILLION = 1000000, BILLION = 1000000000;
 
     public void eco(CommandSender sender, String[] args) {
+
+        if (!sender.hasPermission("economy.commands.eco")) {
+            sender.spigot().sendMessage(error("Insufficient Permission"));
+            return;
+        }
+
         switch (args.length) {
             case 0 -> sender.spigot().sendMessage(error("No command specified"));
             case 1 -> sender.spigot().sendMessage(error("No target specified"));
@@ -60,6 +66,12 @@ public record Commands(SimpleEconomy economy) {
     }
 
     private void ecoAdd(CommandSender sender, EconomyData data, long amount) {
+
+        if (!sender.hasPermission("economy.commands.eco.add")) {
+            sender.spigot().sendMessage(error("Insufficient Permission"));
+            return;
+        }
+
         data.add(amount);
         sender.spigot().sendMessage(line(
                 ChatColor.GREEN, "Added ", ChatColor.WHITE, FORMAT.format(amount),
@@ -68,6 +80,12 @@ public record Commands(SimpleEconomy economy) {
     }
 
     private void ecoRemove(CommandSender sender, EconomyData data, long amount) {
+
+        if (!sender.hasPermission("economy.commands.eco.remove")) {
+            sender.spigot().sendMessage(error("Insufficient Permission"));
+            return;
+        }
+
         data.subtract(amount);
         sender.spigot().sendMessage(line(
                 ChatColor.GREEN, "Removed ", ChatColor.WHITE, FORMAT.format(amount),
@@ -76,6 +94,12 @@ public record Commands(SimpleEconomy economy) {
     }
 
     private void ecoSet(CommandSender sender, EconomyData data, long amount) {
+
+        if (!sender.hasPermission("economy.commands.eco.set")) {
+            sender.spigot().sendMessage(error("Insufficient Permission"));
+            return;
+        }
+
         data.set(amount);
         sender.spigot().sendMessage(line(
                 ChatColor.GREEN, "Set ", ChatColor.WHITE, data.getName() + "'s",
