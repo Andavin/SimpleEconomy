@@ -1,4 +1,4 @@
-name: Simple Economy
+name: SimpleEconomy
 version: '${version}'
 main: com.projecki.economy.SimpleEconomy
 api-version: 1.18
