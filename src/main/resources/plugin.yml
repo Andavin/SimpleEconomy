@@ -1,0 +1,16 @@
+name: Simple Economy
+version: '${version}'
+main: com.projecki.economy.SimpleEconomy
+api-version: 1.18
+authors: [ Andavin ]
+description: A simple economy plugin
+website: https://projecki.com/simpleeconomy
+commands:
+  economy:
+    aliases: [ 'eco' ]
+    usage: '/<command> <add|remove|set> <target> <amount>'
+    description: 'Economy management command'
+  balance:
+    aliases: [ 'bal' ]
+    usage: '/<command> [target]'
+    description: 'Show a balance'

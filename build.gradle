@@ -1,0 +1,115 @@
+plugins {
+    id 'java-library'
+    id 'nu.studer.jooq' version '7.1.1'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
+}
+
+group = 'com.projecki'
+version = '1.0'
+
+// shadowJar configuration
+shadowJar {
+    classifier = ''
+    archiveName = rootProject.name + '.jar'
+}
+
+// jar configuration
+jar {
+    archiveName = shadowJar.archiveName
+}
+
+jooq {
+    configurations {
+        main {  // name of the jOOQ configuration
+            generationTool {
+                jdbc {
+                    driver = 'com.mysql.jdbc.Driver'
+                    url = 'jdbc:mysql://10.17.18.20:3306/economy'
+                    user = 'test'
+                    password = 'password1'
+                    properties {
+                        property {
+                            key = 'ssl'
+                            value = 'true'
+                        }
+                    }
+                }
+                generator {
+                    name = 'org.jooq.codegen.DefaultGenerator'
+                    database {
+                        name = 'org.jooq.meta.mysql.MySQLDatabase'
+                        inputSchema = 'economy'
+                        forcedTypes {
+                            forcedType {
+                                name = 'varchar'
+                                includeExpression = '.*'
+                                includeTypes = 'JSONB?'
+                            }
+                            forcedType {
+                                name = 'varchar'
+                                includeExpression = '.*'
+                                includeTypes = 'INET'
+                            }
+                        }
+                    }
+                    generate {
+                        deprecated = false
+                        records = true
+                        immutablePojos = true
+                        fluentSetters = true
+                    }
+                    target {
+                        packageName = 'com.projecki.economy.database.generated'
+                    }
+                    strategy.name = 'org.jooq.codegen.DefaultGeneratorStrategy'
+                }
+            }
+        }
+    }
+}
+
+repositories {
+    mavenCentral()
+    maven {
+        name = 'spigotmc-repo'
+        url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
+    }
+    maven {
+        name = 'sonatype'
+        url = 'https://oss.sonatype.org/content/groups/public/'
+    }
+}
+
+dependencies {
+    api 'com.zaxxer:HikariCP:5.0.1'
+    api 'org.tinylog:tinylog-api:2.4.1'
+    implementation 'org.tinylog:jul-tinylog:2.4.1'
+    implementation 'org.tinylog:tinylog-impl:2.4.1'
+    compileOnly 'org.spigotmc:spigot-api:1.18.1-R0.1-SNAPSHOT'
+    jooqGenerator 'mysql:mysql-connector-java:8.0.27'
+}
+
+def targetJavaVersion = 17
+java {
+    def javaVersion = JavaVersion.toVersion(targetJavaVersion)
+    sourceCompatibility = javaVersion
+    targetCompatibility = javaVersion
+    if (JavaVersion.current() < javaVersion) {
+        toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible()) {
+        options.release = targetJavaVersion
+    }
+}
+
+processResources {
+    def props = [version: version]
+    inputs.properties props
+    filteringCharset 'UTF-8'
+    filesMatching('plugin.yml') {
+        expand props
+    }
+}
