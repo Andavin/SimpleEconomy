@@ -40,6 +40,8 @@ public final class Data {
             // That will allow for changing of default directory
             // names without new ones being created
             Logger.debug("Configuration directory did not exist. Created.");
+            saveResource("mysql-config.properties",
+                    new File(dir, "mysql-config.properties"));
         }
 
         Logger.info("Data has been initialized");
