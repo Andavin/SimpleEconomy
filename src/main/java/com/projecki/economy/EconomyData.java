@@ -90,7 +90,14 @@ public final class EconomyData {
                 .fetchAsync()
                 .thenApply(result -> {
 
-                    if (!result.isEmpty()) {
+                    if (result.isEmpty()) {
+                        // No data exists - insert
+                        context.insertInto(BALANCES)
+                                .set(BALANCES.UUID, id)
+                                .set(BALANCES.NAME, name)
+                                .set(BALANCES.BALANCE, 0L)
+                                .executeAsync();
+                    } else {
 
                         BalancesRecord record = result.get(0);
                         data.set(record.getBalance());

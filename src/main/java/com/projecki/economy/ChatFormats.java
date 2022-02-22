@@ -58,14 +58,14 @@ public interface ChatFormats {
     static BaseComponent[] error(String error) {
         return new ComponentBuilder()
                 .append(ERROR_START)
-                .append(error).color(ChatColor.GRAY)
+                .append(error).color(ChatColor.GRAY).bold(false)
                 .create();
     }
 
     static BaseComponent[] error(BaseComponent[] error) {
         return new ComponentBuilder()
                 .append(ERROR_START)
-                .append(error)
+                .append(error).bold(false)
                 .create();
     }
 

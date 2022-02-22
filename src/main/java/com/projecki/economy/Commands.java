@@ -123,14 +123,18 @@ public record Commands(SimpleEconomy economy) {
             Optional<EconomyData> optionalData = economy.getData(name);
             if (optionalData.isPresent()) {
                 EconomyData data = optionalData.get();
-                sender.spigot().sendMessage(nameValue(data.getName() + "Balance",
-                        FORMAT.format(data.getBalance())));
+                sender.spigot().sendMessage(nameValue(
+                        data.getName() + "'s Balance",
+                        FORMAT.format(data.getBalance())
+                ));
             } else {
                 economy.load(name).thenAccept(data -> {
 
                     if (data != null) {
-                        sender.spigot().sendMessage(nameValue(data.getName() + "Balance",
-                                FORMAT.format(data.getBalance())));
+                        sender.spigot().sendMessage(nameValue(
+                                data.getName() + "'s Balance",
+                                FORMAT.format(data.getBalance())
+                        ));
                     } else {
                         sender.spigot().sendMessage(error(nameValue(ChatColor.RED, "Player Not Found", name)));
                     }
