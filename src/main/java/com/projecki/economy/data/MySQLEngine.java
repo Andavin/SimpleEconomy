@@ -40,7 +40,7 @@ import static org.jooq.impl.DSL.using;
  */
 public class MySQLEngine implements DataEngine {
 
-    private static final ExecutorService EXECUTOR = new ThreadPoolExecutor(5, 5,
+    private static final ExecutorService EXECUTOR = new ThreadPoolExecutor(2, 10,
             60L, TimeUnit.SECONDS, new LinkedBlockingQueue<>(), new ThreadFactoryBuilder()
             .setNameFormat("MySQL - %d").setUncaughtExceptionHandler((thread, error) -> error.printStackTrace()).build());
 
@@ -71,7 +71,6 @@ public class MySQLEngine implements DataEngine {
                 this.settings.setRenderMapping(renderMapping);
             }
         }
-
         // Must initialize the jdbcUrl here to allow connection
         // Set it as a property because the config below then gets the
         // method "set" + "j".toUpperCase() + "dbcUrl" = "setJdbcUrl"
@@ -95,7 +94,7 @@ public class MySQLEngine implements DataEngine {
      * @return The newly created DSLContext instance.
      */
     public DSLContext create() {
-        DSLContext context = using(this.dataSource, SQLDialect.MARIADB);
+        DSLContext context = using(dataSource, SQLDialect.MYSQL);
         context.configuration().set(EXECUTOR).set(settings);
         return context;
     }
