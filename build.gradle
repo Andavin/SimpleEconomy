@@ -23,10 +23,10 @@ jooq {
         main {  // name of the jOOQ configuration
             generationTool {
                 jdbc {
-                    driver = 'com.mysql.jdbc.Driver'
-                    url = 'jdbc:mysql://10.17.18.20:3306/economy'
-                    user = 'test'
-                    password = 'password1'
+                    driver = 'org.mariadb.jdbc.Driver'
+                    url = 'jdbc:mariadb://10.17.18.20:3306'
+                    user = 'jooq'
+                    password = 'password'
                     properties {
                         property {
                             key = 'ssl'
@@ -37,7 +37,7 @@ jooq {
                 generator {
                     name = 'org.jooq.codegen.DefaultGenerator'
                     database {
-                        name = 'org.jooq.meta.mysql.MySQLDatabase'
+                        name = 'org.jooq.meta.mariadb.MariaDBDatabase'
                         inputSchema = 'economy'
                         forcedTypes {
                             forcedType {
@@ -86,7 +86,7 @@ dependencies {
     implementation 'org.tinylog:jul-tinylog:2.4.1'
     implementation 'org.tinylog:tinylog-impl:2.4.1'
     compileOnly 'org.spigotmc:spigot-api:1.18.1-R0.1-SNAPSHOT'
-    jooqGenerator 'mysql:mysql-connector-java:8.0.27'
+    jooqGenerator 'org.mariadb.jdbc:mariadb-java-client:3.0.3'
 }
 
 def targetJavaVersion = 17
